@@ -25,12 +25,8 @@ app.secret_key = os.getenv("FLASK_SECRET_KEY", "fallback_yash_axon_77")
 GROQ_API_KEY = os.getenv("GROQ_API_KEY")
 client = Groq(api_key=GROQ_API_KEY)
 
-# --- FIXED ERROR PART: Path handling for Windows vs Render(Linux) ---
-if os.name == 'nt':  # If running on Windows
-    TESSERACT_PATH = os.getenv("TESSERACT_PATH", r'C:\Program Files\Tesseract-OCR\tesseract.exe')
-else:  # If running on Render/Linux
-    TESSERACT_PATH = '/usr/bin/tesseract'
-
+# Tesseract OCR Engine Path
+TESSERACT_PATH = os.getenv("TESSERACT_PATH", r'C:\Program Files\Tesseract-OCR\tesseract.exe')
 pytesseract.pytesseract.tesseract_cmd = TESSERACT_PATH
 
 UPLOAD_FOLDER = 'uploads'
@@ -46,16 +42,18 @@ def allowed_file(filename):
 
 def extract_text_from_image(filepath):
     """Extract readable text from image using OCR with graceful fallbacks"""
-    # Check if Tesseract exists at the defined path
-    try:
-        with Image.open(filepath) as img:
-            rgb_img = img.convert('RGB')
-            text = pytesseract.image_to_string(rgb_img)
-            if text.strip():
-                return f"[Visual Scan Content: {text.strip()}]"
-    except Exception:
-        pass
+    # Attempt to use Tesseract if path is valid
+    if os.path.exists(TESSERACT_PATH):
+        try:
+            with Image.open(filepath) as img:
+                rgb_img = img.convert('RGB')
+                text = pytesseract.image_to_string(rgb_img)
+                if text.strip():
+                    return f"[Visual Scan Content: {text.strip()}]"
+        except Exception:
+            pass
 
+    # Fallback or Silent fail if Tesseract is missing
     return "[Scanning image for visual features and metadata...]"
 
 def get_live_data(query):
@@ -162,9 +160,9 @@ def ask():
 I'm delighted to introduce myself as your digital companion. I'm here to provide you with in-depth knowledge, expert insights, and personalized assistance across various domains.
 
 ### Popular areas of interest:
-* **Science & Tech**: AI, Space, and Biotech.
-* **Art & Culture**: History, Music, and Art.
-* **Performance**: Productivity and Skills.
+*   **Science & Tech**: AI, Space, and Biotech.
+*   **Art & Culture**: History, Music, and Art.
+*   **Performance**: Productivity and Skills.
 
 How can I help you today?
 """
@@ -475,12 +473,14 @@ How can I help you today?
         messages.append({"role": "user", "content": user_content})
 
         # -------- GROQ ENGINE CALL (MULTI-MODEL FALLBACK) --------
+        # Updated with active models: llama-3.1-70b is decommissioned
         models_to_try = [current_model, "llama-3.3-70b-versatile", "llama-3.1-8b-instant", "mixtral-8x7b-32768"]
         ai_message = None
         last_error = ""
 
         for model_name in models_to_try:
             try:
+                # If we are failing over from a vision model to a text model, restructure the user message
                 current_messages = messages
                 if "vision" in current_model and "vision" not in model_name:
                     current_messages = [{"role": "system", "content": system_prompt}, {"role": "user", "content": user_text}]
@@ -495,10 +495,11 @@ How can I help you today?
                 break # Success!
             except Exception as e:
                 last_error = str(e)
+                # Retry on Rate Limit (429) OR Decommissioned Model (400)
                 if "429" in last_error or "model_decommissioned" in last_error or "400" in last_error:
-                    continue 
+                    continue # Try next model in line
                 else:
-                    break 
+                    break # Critical error (e.g. Invalid API Key), don't loop
 
         if not ai_message:
             return jsonify({"message": f"Neural Link Failure: {last_error}"})
@@ -524,7 +525,6 @@ How can I help you today?
     except Exception as e:
         return jsonify({"message": f"System Error: {str(e)}"})
 
-# --- FIXED ERROR PART: Bind to the correct Port for Render ---
+# -------------------- RUN --------------------
 if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 5000))
-    app.run(host="0.0.0.0", port=port)
+    app.run(debug=True, host="0.0.0.0", port=5001)
