@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>AXON AI</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+/* LOADING SCREEN */
+#loader {
+    position: fixed;
+    width: 100%;
+    height: 100vh;
+    background: black;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+/* BARS LOADER */
+.bars {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 20px;
+}
+
+.bar {
+    width: 8px;
+    height: 40px;
+    background: #00eaff;
+    animation: pulse 1s infinite ease-in-out;
+}
+
+.bar:nth-child(1) { animation-delay: 0s; }
+.bar:nth-child(2) { animation-delay: 0.1s; }
+.bar:nth-child(3) { animation-delay: 0.2s; }
+.bar:nth-child(4) { animation-delay: 0.3s; }
+.bar:nth-child(5) { animation-delay: 0.4s; }
+
+@keyframes pulse {
+    0%, 100% { height: 20px; opacity: 0.4; }
+    50% { height: 50px; opacity: 1; }
+}
+
+/* TEXT */
+h1 {
+    letter-spacing: 3px;
+}
+
+p {
+    color: #aaa;
+    font-size: 14px;
+}
+
+/* MAIN CONTENT */
+#main {
+    display: none;
+    padding: 40px;
+}
+</style>
+</head>
+
+<body>
+
+<!-- LOADER -->
+<div id="loader">
+    <div class="bars">
+        <div class="bar"></div>
+        <div class="bar"></div>
+        <div class="bar"></div>
+        <div class="bar"></div>
+        <div class="bar"></div>
+    </div>
+    <h1>AXON AI</h1>
+    <p>Booting Neural Core...</p>
+</div>
+
+<!-- MAIN PAGE -->
+<div id="main">
+    <h1>Welcome to AXON AI 🤖</h1>
+</div>
+
+<script>
+// Show loader then navigate to the full app page after ~5.5 seconds
+window.addEventListener('DOMContentLoaded', () => {
+    setTimeout(() => {
+        window.location.href = '/home';
+    }, 5500);
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AXON AI</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
+    <!-- ChatGPT-level Markdown and Syntax Highlighting -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+</head>
+
+<body>
+    <div class="bg-glow"></div>
+
+    <div class="chat-container">
+        <div class="chat-header">
+            <div class="logo-area">
+                <div class="logo-icon">🧠</div>
+                <div>
+                    <h1>AXON AI</h1>
+                    <p class="tagline">Neural Network Active</p>
+                </div>
+            </div>
+            <div class="header-controls">
+                <button id="new-chat-btn" class="icon-btn"
+                    onclick="document.getElementById('question').value='/clear'; askAI();" title="Start New Chat">
+                    ➕
+                </button>
+                <button id="voice-toggle" class="icon-btn" onclick="toggleVoice()" title="Toggle Voice Output">
+                    <span id="voice-icon">🔈</span>
+                </button>
+                <div class="status-dot"></div>
+            </div>
+        </div>
+
+        <div id="chat-box"></div>
+
+        <!-- Premium Voice Recognition Popup -->
+        <div id="voice-overlay" class="hidden">
+            <div class="voice-card">
+                <button class="voice-close" onclick="stopListening()">×</button>
+                <div class="voice-pulse-container">
+                    <div class="pulse-ring"></div>
+                    <div class="pulse-ring"></div>
+                    <div class="pulse-ring"></div>
+                    <div class="pulse-icon">🎙️</div>
+                </div>
+                <div class="voice-status">AXON IS LISTENING</div>
+                <div id="voice-transcript" class="transcript-preview">Waiting for signal...</div>
+                <div class="sound-wave-container">
+                    <span></span><span></span><span></span><span></span><span></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="chat-input-area">
+
+            <div id="preview-container" class="hidden">
+                <div class="preview-bubble">
+                    <img id="img-preview" src="" alt="preview">
+                    <button onclick="clearImage()" class="cancel-img">×</button>
+                </div>
+            </div>
+
+            <div class="input-wrapper">
+                <input type="file" id="image-input" accept="image/*" hidden onchange="handleImageUpload(event)">
+
+                <button class="icon-btn" onclick="document.getElementById('image-input').click()">
+                    📷
+                </button>
+
+                <input type="text" id="question" placeholder="Ask anything..." onkeydown="handleEnter(event)"
+                    autocomplete="off">
+
+                <button id="mic-btn" class="icon-btn" onclick="startListening()">
+                    🎙️
+                </button>
+
+                <button class="send-btn" onclick="askAI()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="22" y1="2" x2="11" y2="13"></line>
+                        <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                    </svg>
+                </button>
+            </div>
+
+            <div id="speech-overlay" class="hidden">
+                <span class="speech-label">Neural Audio:</span>
+                <span id="speech-text"></span>
+                <div class="audio-wave">
+                    <span></span><span></span><span></span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/static/script.js"></script>
+</body>
+
+</html>
