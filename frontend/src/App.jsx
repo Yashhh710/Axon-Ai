@@ -260,7 +260,7 @@ const App = () => {
     setMode('chat');
     window.speechSynthesis.cancel();
     try {
-      await axios.post('/api/chat', { question: '/clear' });
+      await axios.post('/_/backend/api/chat', { question: '/clear' });
     } catch (err) {
       console.warn("Server reset fail", err);
     }
@@ -332,7 +332,7 @@ const App = () => {
     if (currentImage) formData.append('image', currentImage);
 
     try {
-      const response = await axios.post('/api/chat', formData, {
+      const response = await axios.post('/_/backend/api/chat', formData, {
         headers: { 'Content-Type': 'multipart/form-data' }
       });
 
