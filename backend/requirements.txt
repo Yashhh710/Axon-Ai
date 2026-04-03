@@ -1,0 +1,11 @@
+flask
+flask-cors
+requests
+pytesseract
+pillow
+python-dotenv
+groq
+duckduckgo-search
+opencv-python
+numpy
+beautifulsoup4

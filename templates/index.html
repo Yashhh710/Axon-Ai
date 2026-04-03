@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Axon AI | High-Fidelity Neural Assistant</title>
+    <meta name="description" content="Axon AI - A powerful, futuristic AI assistant for research, coding, and productivity. Built with neural search and vision capabilities.">
+    <link rel="stylesheet" href="/static/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Fira+Code&display=swap"
+        rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+</head>
+
+<body>
+    <!-- Premium Loading Screen -->
+    <div id="loader-wrapper">
+        <div class="loader-content">
+            <div class="axon-node">
+                <div class="node-ring"></div>
+                <div class="node-ring"></div>
+                <div class="node-ring"></div>
+                <div class="node-core">🧠</div>
+            </div>
+            <div class="loader-text-container">
+                <h1 class="loader-title">AXON<span>AI</span></h1>
+                <div class="loader-status" id="loader-status">Initializing Neural Link...</div>
+                <div class="loader-progress-bar">
+                    <div class="progress-fill" id="progress-fill"></div>
+                </div>
+            </div>
+        </div>
+        <div class="loader-footer">
+            Neural Core v4.0.2 &bull; Professional Assistant Link
+        </div>
+    </div>
+
+    <!-- Sidebar for Navigation and History -->
+    <aside id="sidebar" class="sidebar">
+        <div class="sidebar-header">
+            <button class="new-chat-btn" onclick="newThread()">
+                <span>✕</span> New Thread
+            </button>
+        </div>
+
+        <div class="nav-section">
+            <div class="history-label">Neural Navigation</div>
+            <div class="nav-item active" data-mode="chat" onclick="switchMode('chat')">
+                <span>💬</span> Chat Hub
+            </div>
+            <div class="nav-item" data-mode="games" onclick="switchMode('games')">
+                <span>🎮</span> Gamers Hub
+            </div>
+            <div class="nav-item" data-mode="images" onclick="switchMode('images')">
+                <span>🎨</span> Image Search
+            </div>
+        </div>
+
+        <div class="history-container">
+            <div id="pathway-section">
+                <div class="history-label">Neural Pathways</div>
+                <div id="history-list">
+                    <div class="history-item active">Current Neural Link</div>
+                </div>
+            </div>
+
+            <div id="games-section" class="hidden">
+                <div class="history-label">Gamers Hub</div>
+
+                <!-- New Feature: Neural Gaming Stats -->
+                <div class="neural-stats">
+                    <div class="stat-card">
+                        <div class="stat-value">0</div>
+                        <div class="stat-label">Wins</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">0</div>
+                        <div class="stat-label">Losses</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">0%</div>
+                        <div class="stat-label">IQ Link</div>
+                    </div>
+                </div>
+
+                <div class="game-search-box">
+                    <input type="text" id="game-search" placeholder="Search games..." onkeyup="filterGames()">
+                </div>
+
+                <div class="game-categories">
+                    <button class="cat-btn active" onclick="filterCategory('all')">All</button>
+                    <button class="cat-btn" onclick="filterCategory('Classic')">Classic</button>
+                    <button class="cat-btn" onclick="filterCategory('Word')">Word</button>
+                    <button class="cat-btn" onclick="filterCategory('Mind')">Mind</button>
+                </div>
+
+                <div class="game-grid" id="game-list-container">
+                    <div class="game-card" data-category="Mind" onclick="startGame('20 Questions')">
+                        <div class="game-icon">🎲</div>
+                        <div class="game-info">
+                            <div class="game-name">20 Questions</div>
+                            <div class="game-meta">Deduction</div>
+                        </div>
+                    </div>
+                    <div class="game-card" data-category="Word" onclick="startGame('Hangman')">
+                        <div class="game-icon">😵</div>
+                        <div class="game-info">
+                            <div class="game-name">Hangman</div>
+                            <div class="game-meta">Spelling</div>
+                        </div>
+                    </div>
+                    <div class="game-card" data-category="Word" onclick="startGame('Word Chain')">
+                        <div class="game-icon">🔗</div>
+                        <div class="game-info">
+                            <div class="game-name">Word Chain</div>
+                            <div class="game-meta">Vocabulary</div>
+                        </div>
+                    </div>
+                    <div class="game-card" data-category="Mind" onclick="startGame('Would You Rather')">
+                        <div class="game-icon">🤔</div>
+                        <div class="game-info">
+                            <div class="game-name">Would You Rather</div>
+                            <div class="game-meta">Choices</div>
+                        </div>
+                    </div>
+                    <div class="game-card" data-category="Classic" onclick="startGame('Trivia')">
+                        <div class="game-icon">🧠</div>
+                        <div class="game-info">
+                            <div class="game-name">Trivia</div>
+                            <div class="game-meta">Knowledge</div>
+                        </div>
+                    </div>
+                    <div class="game-card" data-category="Classic" onclick="startGame('Rock, Paper, Scissors')">
+                        <div class="game-icon">✊</div>
+                        <div class="game-info">
+                            <div class="game-name">Rock Paper Scissors</div>
+                            <div class="game-meta">Luck/Strategy</div>
+                        </div>
+                    </div>
+                    <div class="game-card" data-category="Classic" onclick="startGame('Tic-Tac-Toe')">
+                        <div class="game-icon">⭕</div>
+                        <div class="game-info">
+                            <div class="game-name">Tic-Tac-Toe</div>
+                            <div class="game-meta">Strategy</div>
+                        </div>
+                    </div>
+                    <div class="game-card" data-category="Classic" onclick="startGame('Chess')">
+                        <div class="game-icon">♟️</div>
+                        <div class="game-info">
+                            <div class="game-name">Chess</div>
+                            <div class="game-meta">Grandmaster</div>
+                        </div>
+                    </div>
+                    <div class="game-card" data-category="Word" onclick="startGame('Word Scramble')">
+                        <div class="game-icon">🔤</div>
+                        <div class="game-info">
+                            <div class="game-name">Word Scramble</div>
+                            <div class="game-meta">Anagrams</div>
+                        </div>
+                    </div>
+                    <div class="game-card" data-category="Classic" onclick="startGame('Quiz')">
+                        <div class="game-icon">📝</div>
+                        <div class="game-info">
+                            <div class="game-name">Quiz</div>
+                            <div class="game-meta">Testing</div>
+                        </div>
+                    </div>
+                    <div class="game-card" data-category="Mind" onclick="startGame('Storytelling')">
+                        <div class="game-icon">📖</div>
+                        <div class="game-info">
+                            <div class="game-name">Storytelling</div>
+                            <div class="game-meta">Adventure</div>
+                        </div>
+                    </div>
+                    <div class="game-card" data-category="Mind" onclick="startGame('Mad Libs')">
+                        <div class="game-icon">🤪</div>
+                        <div class="game-info">
+                            <div class="game-name">Mad Libs</div>
+                            <div class="game-meta">Humor</div>
+                        </div>
+                    </div>
+                    <div class="game-card" data-category="Word" onclick="startGame('Word Association')">
+                        <div class="game-icon">💭</div>
+                        <div class="game-info">
+                            <div class="game-name">Word Association</div>
+                            <div class="game-meta">Fast Logic</div>
+                        </div>
+                    </div>
+                    <div class="game-card" data-category="Classic" onclick="startGame('Guess the Number')">
+                        <div class="game-icon">🔢</div>
+                        <div class="game-info">
+                            <div class="game-name">Guess Number</div>
+                            <div class="game-meta">Probability</div>
+                        </div>
+                    </div>
+                    <div class="game-card" data-category="Mind" onclick="startGame('Two Truths and a Lie')">
+                        <div class="game-icon">🤥</div>
+                        <div class="game-info">
+                            <div class="game-name">2 Truths 1 Lie</div>
+                            <div class="game-meta">Social</div>
+                        </div>
+                    </div>
+                    <div class="game-card" data-category="Mind" onclick="startGame('Cipher Breaker')">
+                        <div class="game-icon">🔑</div>
+                        <div class="game-info">
+                            <div class="game-name">Cipher Breaker</div>
+                            <div class="game-meta">Cryptography</div>
+                        </div>
+                    </div>
+                    <div class="game-card" data-category="Mind" onclick="startGame('Emoji Mystery')">
+                        <div class="game-icon">🔍</div>
+                        <div class="game-info">
+                            <div class="game-name">Emoji Mystery</div>
+                            <div class="game-meta">Deduction</div>
+                        </div>
+                    </div>
+                    <div class="game-card" data-category="Classic" onclick="startGame('Memory Master')">
+                        <div class="game-icon">🧠</div>
+                        <div class="game-info">
+                            <div class="game-name">Memory Master</div>
+                            <div class="game-meta">Recall</div>
+                        </div>
+                    </div>
+                    <div class="game-card" data-category="Mind" onclick="startGame('Brain Teaser')">
+                        <div class="game-icon">💡</div>
+                        <div class="game-info">
+                            <div class="game-name">Brain Teaser</div>
+                            <div class="game-meta">Riddles</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="images-section" class="hidden">
+                <div class="history-label">Images Hub</div>
+                <div class="game-search-box">
+                    <input type="text" id="image-search-input" placeholder="Neural Image Search..."
+                        onkeydown="if(event.key==='Enter') searchImagesFromSidebar()">
+                </div>
+                <div class="history-label" style="font-size: 10px; margin-top: 20px;">Quick Templates</div>
+                <div class="game-grid">
+                    <div class="game-card" onclick="quickImageSearch('Cyberpunk City')">
+                        <div class="game-icon">🌃</div>
+                        <div class="game-info">
+                            <div class="game-name">Cyberpunk</div>
+                            <div class="game-meta">Neon Aesthetic</div>
+                        </div>
+                    </div>
+                    <div class="game-card" onclick="quickImageSearch('Hyper-realistic Space')">
+                        <div class="game-icon">🚀</div>
+                        <div class="game-info">
+                            <div class="game-name">Deep Space</div>
+                            <div class="game-meta">Galactic View</div>
+                        </div>
+                    </div>
+                    <div class="game-card" onclick="quickImageSearch('Modern Architecture')">
+                        <div class="game-icon">🏢</div>
+                        <div class="game-info">
+                            <div class="game-name">Architecture</div>
+                            <div class="game-meta">Minimalist</div>
+                        </div>
+                    </div>
+                    <div class="game-card" onclick="quickImageSearch('Surreal Abstract Art')">
+                        <div class="game-icon">🎨</div>
+                        <div class="game-info">
+                            <div class="game-name">Abstract</div>
+                            <div class="game-meta">Neural Art</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="sidebar-footer">
+            <div class="user-tag">
+                <div class="avatar">
+                    <img src="https://avatars.githubusercontent.com/u/233944797?v=4" alt="User">
+                </div>
+                <div>
+                    <div style="font-weight: 600;">Yash Tambade</div>
+                    <div style="font-size: 11px; color: var(--text-muted);">Code. Create. Dominate</div>
+                </div>
+            </div>
+            <div style="margin-top: 15px; display: flex; gap: 10px;">
+                <button id="voice-toggle" class="action-btn" onclick="toggleVoice()" title="Toggle Voice Output">
+                    <span id="voice-icon">🔊</span>
+                </button>
+                <div id="status-light"
+                    style="width: 8px; height: 8px; border-radius: 50%; background: #10b981; margin-top: 15px;"></div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Workspace Area -->
+    <main class="main-stage">
+        <!-- Top Navigation -->
+        <header class="top-bar">
+            <div style="display: flex; align-items: center; gap: 15px;">
+
+                <div class="logo">
+                    <span style="font-size: 20px;">🧠</span> AXON AI
+                </div>
+                <div style="display: flex; gap: 10px;">
+
+                    <button id="new-chat-btn" class="action-btn" onclick="newThread()" title="Clear Thread">
+                        ⟳
+                    </button>
+                </div>
+        </header>
+
+        <!-- Message History Viewport -->
+        <div id="chat-box" class="chat-viewport"></div>
+
+        <!-- Sticky Interaction Bar -->
+        <div class="input-dock">
+            <div id="preview-container" class="hidden"
+                style="margin-bottom: 10px; padding: 10px; background: rgba(255,255,255,0.05); border-radius: 8px;">
+                <div style="position: relative; width: 60px; height: 60px;">
+                    <img id="img-preview" src="" alt="preview"
+                        style="width: 100%; height: 100%; border-radius: 4px; object-fit: cover;">
+                    <button onclick="clearImage()"
+                        style="position: absolute; top: -5px; right: -5px; background: #ef4444; border: none; color: white; border-radius: 50%; width: 18px; height: 18px; cursor: pointer; font-size: 10px;">✕</button>
+                </div>
+            </div>
+
+            <div class="input-container">
+                <input type="file" id="image-input" accept="image/*" hidden onchange="handleImageUpload(event)">
+
+                <button class="action-btn" onclick="document.getElementById('image-input').click()"
+                    title="Send Image Data">
+                    📷
+                </button>
+
+                <div id="img-tag" class="img-tag hidden">
+                    /img
+                </div>
+
+                <input type="text" id="question" placeholder="Enter command or query..." onkeydown="handleEnter(event)"
+                    autocomplete="off">
+
+                <button id="img-mode-btn" class="action-btn" onclick="toggleImgMode()" title="Toggle Image Search Mode">
+                    🎨
+                </button>
+
+                <button class="send-btn" onclick="askAI()">
+                    <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2.5"
+                        fill="none">
+                        <path d="M5 12h14M12 5l7 7-7 7" />
+                    </svg>
+                </button>
+            </div>
+            <p
+                style="font-size: 11px; text-align: center; color: var(--text-muted); margin-top: 12px; font-weight: 500;">
+                ⚠️ Axon AI isn’t perfect—verify important info.
+            </p>
+        </div>
+    </main>
+
+    <!-- Pro Voice Overlay -->
+    <div id="voice-overlay" class="hidden">
+        <div class="voice-card">
+            <div class="voice-status">System Active & Listening</div>
+            <div id="voice-transcript" class="transcript-display">Connecting to neural cloud...</div>
+            <div style="display: flex; justify-content: center; gap: 4px; height: 30px;">
+                <div style="width: 3px; background: var(--primary); animation: wave 1s infinite alternate;"></div>
+                <div style="width: 3px; background: var(--primary); animation: wave 1s 0.2s infinite alternate;"></div>
+                <div style="width: 3px; background: var(--primary); animation: wave 1s 0.4s infinite alternate;"></div>
+                <div style="width: 3px; background: var(--primary); animation: wave 1s 0.1s infinite alternate;"></div>
+            </div>
+            <button onclick="stopListening()"
+                style="margin-top: 40px; border: none; background: rgba(239, 68, 68, 0.1); color: #ef4444; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-weight: 600;">Terminate
+                Session</button>
+        </div>
+    </div>
+
+    <!-- Floating Trigger -->
+    <button id="floating-axon-btn" onclick="activateJarvis()"
+        style="position: fixed; bottom: 20px; right: 20px; width: 44px; height: 44px; border: 1px solid var(--border); background: var(--bg-sidebar); border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 18px; box-shadow: 0 4px 15px rgba(0,0,0,0.4); z-index: 2000;">
+        🎙️
+    </button>
+
+    <audio id="sound-activate" src="https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3"
+        preload="auto"></audio>
+    <audio id="sound-success" src="https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3"
+        preload="auto"></audio>
+
+    <script src="/static/script.js"></script>
+
+    <style>
+        @keyframes wave {
+            from {
+                height: 10%;
+                opacity: 0.5;
+            }
+
+            to {
+                height: 100%;
+                opacity: 1;
+            }
+        }
+    </style>
+</body>
+
+</html>

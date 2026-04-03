@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AXON AI • NEURAL LINK</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=JetBrains+Mono:wght@500&display=swap');
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #050505;
+            color: #ffffff;
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .grid-container {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(99, 102, 241, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(99, 102, 241, 0.05) 1px, transparent 1px);
+            background-size: 60px 60px;
+            perspective: 1000px;
+        }
+
+        .grid-container::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle, transparent 20%, #050505 90%);
+        }
+
+        .loader-content {
+            position: relative;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2.5rem;
+        }
+
+        .neural-bars {
+            display: flex;
+            align-items: flex-end;
+            gap: 12px;
+            height: 80px;
+        }
+
+        .bar {
+            width: 6px;
+            border-radius: 10px;
+            background: #6366f1;
+            box-shadow: 0 0 25px rgba(99, 102, 241, 0.8);
+            animation: neural-pulse 1.5s infinite ease-in-out;
+        }
+
+        @keyframes neural-pulse {
+            0%, 100% { height: 30%; opacity: 0.3; transform: scaleY(0.8); }
+            50% { height: 100%; opacity: 1; transform: scaleY(1); }
+        }
+
+        .axon-glitch {
+            font-size: 4.5rem;
+            font-weight: 900;
+            letter-spacing: 15px;
+            text-transform: uppercase;
+            position: relative;
+            color: white;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+        }
+
+        .status-box {
+            text-align: center;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .status-main {
+            color: #6366f1;
+            font-size: 0.85rem;
+            letter-spacing: 5px;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        .status-sub {
+            color: #4b5563;
+            font-size: 0.7rem;
+            letter-spacing: 2px;
+        }
+
+        .progress-rail {
+            width: 350px;
+            height: 2px;
+            background: rgba(255, 255, 255, 0.03);
+            position: relative;
+            overflow: hidden;
+            border-radius: 10px;
+        }
+
+        .progress-fill {
+            width: 0%;
+            height: 100%;
+            background: #6366f1;
+            box-shadow: 0 0 15px #6366f1;
+            animation: fill-prog 5.5s forwards cubic-bezier(0.19, 1, 0.22, 1);
+        }
+
+        @keyframes fill-prog {
+            0% { width: 0%; }
+            20% { width: 15%; }
+            50% { width: 65%; }
+            80% { width: 92%; }
+            100% { width: 100%; }
+        }
+
+        .scanline {
+            position: absolute;
+            width: 100%;
+            height: 100px;
+            background: linear-gradient(to bottom, transparent, rgba(99, 102, 241, 0.05), transparent);
+            top: -100px;
+            animation: scan 4s linear infinite;
+        }
+
+        @keyframes scan {
+            0% { top: -100px; }
+            100% { top: 100vh; }
+        }
+    </style>
+</head>
+<body>
+    <div class="grid-container"></div>
+    <div class="scanline"></div>
+    
+    <div class="loader-content">
+        <div class="neural-bars">
+            <div class="bar" style="animation-delay: 0.0s"></div>
+            <div class="bar" style="animation-delay: 0.1s"></div>
+            <div class="bar" style="animation-delay: 0.2s"></div>
+            <div class="bar" style="animation-delay: 0.3s"></div>
+            <div class="bar" style="animation-delay: 0.2s"></div>
+            <div class="bar" style="animation-delay: 0.1s"></div>
+            <div class="bar" style="animation-delay: 0.0s"></div>
+        </div>
+
+        <h1 class="axon-glitch">AXON AI</h1>
+
+        <div class="status-box">
+            <div class="status-main" id="status">Syncing Neural Portals...</div>
+            <div class="status-sub" id="detail">Nexus Engine v1.0.4 | Memory Secure</div>
+        </div>
+
+        <div class="progress-rail">
+            <div class="progress-fill"></div>
+        </div>
+    </div>
+
+    <script>
+        const texts = [
+            "Initializing Neural Core...",
+            "Establishing Secure Link...",
+            "Synchronizing Game Engine...",
+            "Decrypting Neural Nexus...",
+            "Axon AI Ready."
+        ];
+        let count = 0;
+        const s = document.getElementById('status');
+        const d = document.getElementById('detail');
+        
+        const interval = setInterval(() => {
+            if(count < texts.length) {
+                s.textContent = texts[count];
+                d.textContent = `Accessing Node: 0x${Math.floor(Math.random()*0xFFFFFF).toString(16).toUpperCase()} | Latency: 2ms`;
+                count++;
+            } else {
+                clearInterval(interval);
+            }
+        }, 1100);
+
+        setTimeout(() => {
+            window.location.href = '/home';
+        }, 5500);
+    </script>
+</body>
+</html>
