@@ -6,6 +6,6 @@ pillow
 python-dotenv
 groq
 duckduckgo-search
-opencv-python
+opencv-python-headless
 numpy
 beautifulsoup4
