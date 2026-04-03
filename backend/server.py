@@ -37,7 +37,7 @@ client = Groq(api_key=GROQ_API_KEY) if GROQ_API_KEY else None
 TESSERACT_PATH = os.getenv("TESSERACT_PATH", "tesseract")
 pytesseract.pytesseract.tesseract_cmd = TESSERACT_PATH
 
-UPLOAD_FOLDER = 'uploads'
+UPLOAD_FOLDER = '/tmp/uploads'
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'webp'}
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
