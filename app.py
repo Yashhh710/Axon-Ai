@@ -315,7 +315,7 @@ How can I help you today?
         if q_lower in ["bye", "goodbye", "exit", "see ya"]:
             return jsonify({"message": "Goodbye! My systems will remain in standby until your next request. Stay curious! 🚀"})
 
-        if "gay" in q_lower:
+        if q_lower in ["gay", "Gay"]:
             return jsonify({"message": "Listen, that person is not gay. The real g@y is **Satvik Poojari**. 🏳️‍🌈"})
 
         if is_dev_query(question):
